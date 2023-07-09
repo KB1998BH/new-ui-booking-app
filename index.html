@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
     <head>
         <style>
@@ -32,7 +32,7 @@
           <input type="tel" name="phone"><br/>
           <label >Time for Call:</label><br/>
           <input type="datetime-local" name="timeforcalling"><br/>
-          <!-- <input type="button" onclick="submitForm()" value="Submit form" class="btn btn-primary"> -->
+          
           <button>Submit</button>
          <li> <input type="button" value="Delete"></li>
         </div>
@@ -80,4 +80,140 @@
       //show the userdetails on the screen using dom manipulation
     </script>
   </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .center {
+            text-align: center;
+            color: red;
+        }
+
+        input {
+            font-size: 30px;
+            color: black;
+            width: 1000px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 class="center">Book a Call</h1>
+    <p><b>Book a call slot; our representative will call you within 1 hour of the selected time</b></p>
+    <form onsubmit="saveToLocalStorage(event)">
+        <div class="container">
+            <div class="card-border">
+                <label>Name:</label>
+                <input type="text" name="username" required><br>
+                <label>Email Id:</label>
+                <input type="email" name="emailId" required><br>
+                <label>Phone:</label>
+                <input type="tel" name="phone"><br>
+                <label>Time for Call:</label>
+                <input type="datetime-local" name="timeforcalling"><br>
+                <button>Submit</button>
+            </div>
+        </div>
+    </form>
+    <ul id="listofitems"></ul>
+    <script>
+        // Load existing entries from local storage on page load
+       window.onload = function() {
+        for(let i=0; i<localStorage.length; i++){
+          const key = localStorage.key(i);
+          const entry = JSON.parse(localStorage.getItem(key));
+          showUserOnScreen(entry);
+        }
+       };
+
+       function saveToLocalStorage(event){
+        event.preventDefault();
+        const name = event.target.username.value;
+        const email = event.target.emailId.value;
+        const phonenumber = event.target.phone.value;
+        const call = event.target.timeforcalling.value;
+
+        const obj = {
+          name,
+          email,
+          phonenumber,
+          call
+        };
+
+        localStorage.setItem(obj.email, JSON.stringify(obj) );
+        showUserOnScreen(obj);
+      }
+
+      function showUserOnScreen(obj){
+        const parentElem = document.getElementById('listofitems');
+        const childElem = document.createElement('li');
+        childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phonenumber + ' - ' + obj.call;
+
+        //editbutton 
+        const editbutton = document.createElement('button');
+        editbutton.textContent = 'Edit';
+        editbutton.addEventListener('click', function() {
+          editEntry(obj.email);
+        });
+
+        //delete
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', function() {
+          deleteEntry(obj.email);
+          parentElem.removeChild(childElem);
+        });
+        childElem.appendChild(editbutton);
+        childElem.appendChild(deleteButton);
+        parentElem.appendChild(childElem);
+      }
+
+      function deleteEntry(email){
+        localStorage.removeItem(email);
+
+        //update the list of items on the screen 
+        const parentElem = document.getElementById('listofitems');
+        const listItems = parentElem.getElementsByTagName('li');
+
+        for(let i=0; i<listItems.length; i++){
+          const item = listItems[i];
+          const emailText = item.textContent.split(' - ')[1];
+
+          if(emailText == email){
+            parentElem.removeChild(item);
+            break;
+          }
+        }
+      }
+
+      function editEntry(email){
+        const obj = JSON.parse(localStorage.getItem(email));
+
+        //set the from value to selected entry of the edition 
+        document.querySelector('form input[name ="username"]').value = obj.name;
+        document.querySelector('form input[name ="emailId"]').value = obj.email;
+        document.querySelector('form input[name ="phone"]').value = obj.phonenumber;
+        document.querySelector('form input[name ="timeforcalling"]').value = obj.call;
+        
+         // Remove the entry from local storage
+         localStorage.removeItem(email);
+
+        // Update the list of items on the screen
+        const parentElem = document.getElementById('listofitems');
+        const listItems = parentElem.getElementsByTagName('li');
+
+        for (let i = 0; i < listItems.length; i++) {
+            const item = listItems[i];
+            const emailText = item.textContent.split(' - ')[1];
+
+            if (emailText === email) {
+                parentElem.removeChild(item);
+                break;
+            }
+        }
+      }
+    </script>
+</body>
 </html>
