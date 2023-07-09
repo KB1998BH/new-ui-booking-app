@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+        .center {
+          text-align: center;
+          color: red;
+        }
+        
+        input {
+          font-size: 30px;
+          color: black;
+          width: 1000px;
+        }
+        </style>
+        </head>
+  <body> 
+    <h1 class="center">Book a Call</h1>
+    <p><b>Book a call slot; our representative will call you within 1 hour of the selected time</b></p>
+    <form onsubmit="saveToLocalStorage(event)">
+       <div class="container">
+         <div class="card-border">
+          <label>Name:</label>
+          <input type="text" name="username" required><br>
+          <label>Email Id:</label>
+          <input type="email" name="emailId" required><br>
+          <label>Phone:</label>
+          <input type="tel" name="phone"><br>
+          <label >Time for Call:</label>
+          <input type="datetime-local" name="timeforcalling"><br>
+          <!-- <input type="button" onclick="submitForm()" value="Submit form" class="btn btn-primary"> -->
+          <button>Submit</button>
+        </div>
+        </div>
+    </form>
+    <ul id ="listofitems"></ul>
+    <script>
+      function saveToLocalStorage(event){
+        event.preventDefault();
+        const name = event.target.username.value;
+        const email = event.target.emailId.value;
+        const phonenumber = event.target.phone.value;
+        const call = event.target.timeforcalling.value;
+        // localStorage.setItem('name', name);
+        // localStorage.setItem('emailId', emailId);
+        // localStorage.setItem('phoneNumber', phone);
+
+        const obj = {
+          name,
+          email,
+          phonenumber,
+          call
+        }
+        localStorage.setItem(obj.emailId, JSON.stringify(obj))
+        showUserOnScreen(obj)
+      }
+      function showUserOnScreen(obj) {
+        const parentElem = document.getElementById('listofitems')
+        const childElem = document.createElement('li')
+        childElem.textContent = obj.name + ' - ' + obj.email + ' - ' + obj.phonenumber + ' - ' + obj.call
+        parentElem.appendChild(childElem)
+      }
+      // store the userdetails it in localstorage 
+      //show the userdetails on the screen using dom manipulation
+    </script>
+  </body>
+</html>
