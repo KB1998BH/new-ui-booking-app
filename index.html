@@ -121,13 +121,27 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
     <script>
         // Load existing entries from local storage on page load
-       window.onload = function() {
-        for(let i=0; i<localStorage.length; i++){
-          const key = localStorage.key(i);
-          const entry = JSON.parse(localStorage.getItem(key));
-          showUserOnScreen(entry);
-        }
-       };
+      //  window.onload = function() {
+      //   //uses axios for get call api
+      //   axios.get("https://crudcrud.com/api/d71599b9109c428e958ae86caa4f7e1e/appionmentData")
+      //   .then((response) => {
+      //     console.log(response);
+      //     for(var i=0; i<response.data.length; i++) {
+      //       showUserOnScreen(response.data[i]);
+      //     }
+      //   })
+      //   .catch((error) => {
+      //     console.log(error);
+      //   })
+      //   // for(let i=0; i<localStorage.length; i++){
+      //   //   const key = localStorage.key(i);
+      //   //   const entry = JSON.parse(localStorage.getItem(key));
+      //   //   showUserOnScreen(entry);
+      //   // }
+      //  };
+
+
+      
 
        function saveToLocalStorage(event){
         event.preventDefault();
@@ -144,7 +158,7 @@
         };
         
         ///--uses axios post api call for  use in crudcrud.com api
-        axios.post("https://crudcrud.com/api/d71599b9109c428e958ae86caa4f7e1e/appoinmentData", obj)
+        axios.post("https://crudcrud.com/api/cda3f96927e6463aafc503009321d8e9/appoinmentData", obj)
         .then((response) => {
           showUserOnScreen(response.data);
           console.log(response)
@@ -156,6 +170,27 @@
         //localStorage.setItem(obj.email, JSON.stringify(obj) );
         //showUserOnScreen(obj);
       }
+
+      ////----window listener 
+      // Load existing entries from local storage on page load
+      //showuserscreen
+      window.addEventListener("DOMContentLoaded", () =>{
+          //uses axios for get call api
+         axios.get("https://crudcrud.com/api/cda3f96927e6463aafc503009321d8e9/appionmentData")
+        .then((response) => {
+          //console.log(response);
+
+          for(var i=0; i<response.data.length; i++) {
+            showUserOnScreen(response.data[i]);
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+       
+       })
+
+
 
       function showUserOnScreen(obj){
         const parentElem = document.getElementById('listofitems');
@@ -225,6 +260,9 @@
             }
         }
       }
+
+      
+  
     </script>
 </body>
 </html>
