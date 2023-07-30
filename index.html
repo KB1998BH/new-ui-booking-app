@@ -118,6 +118,7 @@
         </div>
     </form>
     <ul id="listofitems"></ul>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.4.0/axios.min.js"></script>
     <script>
         // Load existing entries from local storage on page load
        window.onload = function() {
@@ -141,9 +142,19 @@
           phonenumber,
           call
         };
-
-        localStorage.setItem(obj.email, JSON.stringify(obj) );
-        showUserOnScreen(obj);
+        
+        ///--uses axios post api call for  use in crudcrud.com api
+        axios.post("https://crudcrud.com/api/d71599b9109c428e958ae86caa4f7e1e/appoinmentData", obj)
+        .then((response) => {
+          showUserOnScreen(response.data);
+          console.log(response)
+        })
+        .catch((err) => {
+          document.body.innerHTML = document.body.innerHTML + "<h4> Something went wrong </h4>"
+          console.log(err)
+        })
+        //localStorage.setItem(obj.email, JSON.stringify(obj) );
+        //showUserOnScreen(obj);
       }
 
       function showUserOnScreen(obj){
