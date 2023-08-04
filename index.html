@@ -113,7 +113,7 @@
                 <input type="tel" name="phone"><br>
                 <label>Time for Call:</label>
                 <input type="datetime-local" name="timeforcalling"><br>
-                <button>Submit</button>
+                <button type="submit" onclick="editUser()">Submit</button>
             </div>
         </div>
     </form>
@@ -158,7 +158,7 @@
         };
         
         ///--uses axios post api call for  use in crudcrud.com api
-        axios.post("https://crudcrud.com/api/939f402bfdfd4f7591f697fc03de16c6/appoinmentData", obj)
+        axios.post("https://crudcrud.com/api/ac67aa500de44b08b0b4a1a9af0e4c72/appoinmentData", obj)
         .then((response) => {
           showUserOnScreen(response.data);
           console.log(response)
@@ -176,7 +176,7 @@
       //showuserscreen
       window.addEventListener("DOMContentLoaded", () =>{
           //uses axios for get call api
-         axios.get("https://crudcrud.com/api/cda3f96927e6463aafc503009321d8e9/appionmentData")
+         axios.get("https://crudcrud.com/api/ac67aa500de44b08b0b4a1a9af0e4c72/appionmentData")
         .then((response) => {
           console.log(response);
 
@@ -219,7 +219,7 @@
       function deleteEntry(userId){
 
         //network call 
-        axios.delete(`https://crudcrud.com/api/939f402bfdfd4f7591f697fc03de16c6/appoinmentData/${userId}`)
+        axios.delete(`https://crudcrud.com/api/ac67aa500de44b08b0b4a1a9af0e4c72/appoinmentData/${userId}`)
         .then((response) => {
           removeUserFromscreen(userId);
         })
@@ -251,34 +251,94 @@
 
       }
 
-      function editEntry(email){
+      // function editEntry(email){
+      //   //const obj = JSON.parse(localStorage.getItem(email));
+
+        
+        
+
+      //   //set the from value to selected entry of the edition 
+      //   document.querySelector('form input[name ="username"]').value = obj.name;
+      //   document.querySelector('form input[name ="emailId"]').value = obj.email;
+      //   document.querySelector('form input[name ="phone"]').value = obj.phonenumber;
+      //   document.querySelector('form input[name ="timeforcalling"]').value = obj.call;
+        
+      //    // Remove the entry from local storage
+      //    localStorage.removeItem(email);
+
+      //   // Update the list of items on the screen
+      //   const parentElem = document.getElementById('listofitems');
+      //   const listItems = parentElem.getElementsByTagName('li');
+
+      //   for (let i = 0; i < listItems.length; i++) {
+      //       const item = listItems[i];
+      //       const emailText = item.textContent.split(' - ')[1];
+
+      //       if (emailText === email) {
+      //           parentElem.removeChild(item);
+      //           break;
+      //       }
+      //   }
+      // }
+
+      async function editEntry(email) {
         const obj = JSON.parse(localStorage.getItem(email));
 
-        //set the from value to selected entry of the edition 
-        document.querySelector('form input[name ="username"]').value = obj.name;
-        document.querySelector('form input[name ="emailId"]').value = obj.email;
-        document.querySelector('form input[name ="phone"]').value = obj.phonenumber;
-        document.querySelector('form input[name ="timeforcalling"]').value = obj.call;
-        
-         // Remove the entry from local storage
-         localStorage.removeItem(email);
+        // Set the form value to selected entry for editing
+        document.querySelector('form input[name="username"]').value = obj.name;
+        document.querySelector('form input[name="emailId"]').value = obj.email;
+        document.querySelector('form input[name="phone"]').value = obj.phonenumber;
+        document.querySelector('form input[name="timeforcalling"]').value = obj.call;
+    }
 
-        // Update the list of items on the screen
-        const parentElem = document.getElementById('listofitems');
-        const listItems = parentElem.getElementsByTagName('li');
+    async function editUser() {
+        // Get the updated values from the form
+        const username = document.querySelector('form input[name="username"]').value;
+        const email = document.querySelector('form input[name="emailId"]').value;
+        const phone = document.querySelector('form input[name="phone"]').value;
+        const timeforcalling = document.querySelector('form input[name="timeforcalling"]').value;
 
-        for (let i = 0; i < listItems.length; i++) {
-            const item = listItems[i];
-            const emailText = item.textContent.split(' - ')[1];
+        // Create an object with the updated details
+        const updatedUser = {
+            name: username,
+            email: email,
+            phonenumber: phone,
+            call: timeforcalling,
+        };
 
-            if (emailText === email) {
-                parentElem.removeChild(item);
-                break;
+        try {
+            // Make a PUT request to update the user details on the server
+            await axios.put(`https://crudcrud.com/api/ac67aa500de44b08b0b4a1a9af0e4c72` + email, updatedUser);
+
+            // Remove the entry from local storage
+            localStorage.removeItem(email);
+
+            // Update the list of items on the screen
+            const parentElem = document.getElementById('listofitems');
+            const listItems = parentElem.getElementsByTagName('li');
+
+            for (let i = 0; i < listItems.length; i++) {
+                const item = listItems[i];
+                const emailText = item.textContent.split(' - ')[1];
+
+                if (emailText === email) {
+                    parentElem.removeChild(item);
+                    break;
+                }
             }
-        }
-      }
 
-      
+            // Optionally, you can add the updated entry back to the list with the new details
+            // const newItem = document.createElement('li');
+            // newItem.textContent = `${username} - ${email} - ${phone} - ${timeforcalling}`;
+            // parentElem.appendChild(newItem);
+        } catch (error) {
+            console.error('Error updating user details:', error);
+        }
+    }
+
+
+
+
   
     </script>
 </body>
